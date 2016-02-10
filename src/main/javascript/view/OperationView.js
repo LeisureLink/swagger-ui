@@ -19,10 +19,10 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     this.parentId = this.model.parentId;
     this.nickname = this.model.nickname;
     this.model.encodedParentId = encodeURIComponent(this.parentId);
-    
+
     if (opts.swaggerOptions) {
       this.model.defaultRendering = opts.swaggerOptions.defaultModelRendering;
-      
+
       if (opts.swaggerOptions.showRequestHeaders) {
         this.model.showRequestHeaders = true;
       }
@@ -201,8 +201,22 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     contentTypeModel = {
       isParam: false
     };
+
+    function isOnlyJson(val) {
+      if(_.isString(val)) {
+        return /json/.test(val);
+      } else if(_.isArray(val) && _.size(val) === 1) {
+        return /json/.test(val[0]);
+      } else {
+        return false;
+      }
+    }
+
     contentTypeModel.consumes = this.model.consumes;
+    contentTypeModel.consumesOnlyJSON = isOnlyJson(contentTypeModel.consumes);
     contentTypeModel.produces = this.model.produces;
+    contentTypeModel.producesOnlyJSON = isOnlyJson(contentTypeModel.produces);
+
     ref3 = this.model.parameters;
     for (n = 0, len2 = ref3.length; n < len2; n++) {
       param = ref3[n];
@@ -233,7 +247,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     ref4 = this.model.parameters;
     for (p = 0, len3 = ref4.length; p < len3; p++) {
       param = ref4[p];
-      this.addParameter(param, contentTypeModel.consumes);
+      this.addParameter(param, contentTypeModel);
     }
     ref5 = this.model.responseMessages;
     for (q = 0, len4 = ref5.length; q < len4; q++) {
@@ -263,9 +277,10 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     return headers;
   },
 
-  addParameter: function(param, consumes) {
+  addParameter: function(param, contentTypeModel) {
     // Render a parameter
-    param.consumes = consumes;
+    param.consumes = contentTypeModel.consumes;
+    param.consumesOnlyJSON = contentTypeModel.consumesOnlyJSON;
     param.defaultRendering = this.model.defaultRendering;
 
     // Copy this param JSON spec so that it will be available for JsonEditor
@@ -275,7 +290,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       // This is required for JsonEditor to display the root properly
       if(!param.schema.type){
         param.schema.type = 'object';
-      } 
+      }
       // This is the title that will be used by JsonEditor for the root
       // Since we already display the parameter's name in the Parameter column
       // We set this to space, we can't set it to null or space otherwise JsonEditor
@@ -283,7 +298,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       if(!param.schema.title){
         param.schema.title = ' ';
       }
-    } 
+    }
 
     var paramView = new SwaggerUi.Views.ParameterView({
       model: param,
