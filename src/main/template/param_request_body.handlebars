@@ -1,0 +1,22 @@
+<td class='request_body' colspan="5">
+  <h4 data-sw-translate>Request Body</h4>
+
+  <p><span class="model-signature" /></p>
+
+  <div class="markdown">{{{description}}}</div>
+
+  <div>
+  {{#if default}}
+    <div class="editor_holder"></div>
+    <textarea class='body-textarea {{#if required}}required{{/if}}' placeholder='{{#if required}}(required){{/if}}' name='{{name}}' id="{{valueId}}">{{default}}</textarea>
+    <br />
+    <div class="parameter-content-type" />
+  {{else}}
+    <textarea class='body-textarea {{#if required}}required{{/if}}' placeholder='{{#if required}}(required){{/if}}' name='{{name}}' id='{{valueId}}'></textarea>
+    <div class="editor_holder"></div>
+    <br />
+    <div class="parameter-content-type" />
+  {{/if}}
+  </div>
+
+</td>

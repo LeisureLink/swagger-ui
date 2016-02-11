@@ -20,11 +20,11 @@ SwaggerUi.Views.SignatureView = Backbone.View.extend({
     } else {
       this.switchToSnippet();
     }
-    
+
     this.isParam = this.model.isParam;
 
     if (this.isParam) {
-      $('.notice', $(this.el)).text('Click to set as parameter value');
+      $('.notice', $(this.el)).text('(click to set as request body)');
     }
 
     return this;
