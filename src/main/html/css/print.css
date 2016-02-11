@@ -340,15 +340,13 @@
 }
 .swagger-section .swagger-ui-wrap .model-signature .signature-nav a {
   text-decoration: none;
-  color: #AAA;
+  color: #555;
 }
-.swagger-section .swagger-ui-wrap .model-signature .signature-nav a:hover {
+.swagger-section .swagger-ui-wrap .model-signature .signature-nav a:hover:not(.selected) {
   text-decoration: underline;
-  color: black;
 }
 .swagger-section .swagger-ui-wrap .model-signature .signature-nav .selected {
-  color: black;
-  text-decoration: none;
+  color: #000;
 }
 .swagger-section .swagger-ui-wrap .model-signature .propType {
   color: #5555aa;
@@ -376,7 +374,7 @@
   float: left;
   margin: 0 5px 5px 0;
   padding: 2px 5px 2px 0;
-  border-right: 1px solid #ddd;
+  border-right: 1px solid #aaa;
 }
 .swagger-section .swagger-ui-wrap .model-signature .propOpt {
   color: #555;
@@ -448,6 +446,16 @@
   width: 300px;
   height: 100px;
   border: 1px solid #aaa;
+}
+.swagger-section .swagger-ui-wrap .request_body {
+  padding: 0;
+  font-size: 100%;
+  border-bottom: none;
+}
+.swagger-section .swagger-ui-wrap .request_body .body-textarea {
+  width: 100%;
+  height: 200px;
+  box-sizing: border-box;
 }
 .swagger-section .swagger-ui-wrap .markdown p code,
 .swagger-section .swagger-ui-wrap .markdown li code {
