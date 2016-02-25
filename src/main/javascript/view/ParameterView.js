@@ -18,10 +18,11 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
       var schema = this.model.schema;
       if (schema && schema.$ref) {
         var ref = schema.$ref;
+        type = 'schema-'; //Prefix custom type w/ schema- to avoid collisions w/ keywords (Array <=> array)
         if (ref.indexOf('#/definitions/') === 0) {
-          type = ref.substring('#/definitions/'.length);
+          type += ref.substring('#/definitions/'.length);
         } else {
-          type = ref;
+          type += ref;
         }
       }
     }
