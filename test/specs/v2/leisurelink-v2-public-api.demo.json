@@ -1,6 +1,94 @@
 {
   "swagger": "2.0",
   "paths": {
+    "/hub/v2/pmcs": {
+      "post": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pmcs"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "pmc",
+            "in": "body",
+            "name": "NamePhoneNumberReservationPhoneNumberEmailAddressWebsiteUrlModel",
+            "schema": {
+              "$ref": "#/definitions/NamePhoneNumberReservationPhoneNumberEmailAddressWebsiteUrlModel"
+            }
+          }
+        ],
+        "summary": "Request for a new pmc to be created",
+        "description": "\nThis endpoint is used to initiate a workflow request to create a new pmc. If accepted, the response will include a Location header that can be used to poll the status of the workflow request.\n\nSee the \"Get workflow status for a newly created pmc\" endpoint documentation for details on interpreting the workflow status.\n"
+      }
+    },
+    "/hub/v2/pmcs/workflows/{workflowId}": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StatusMessagePmcIdUrlModel"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pmcs"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "Provided in the Location header of the create pmc response",
+            "type": "string",
+            "name": "workflowId",
+            "in": "path"
+          }
+        ],
+        "summary": "Get workflow status for a newly created pmc",
+        "description": "\nThis endpoint is used to check the status of a recently create pmc workflow request.\n\nSee the \"Create a new pmc\" endpoint documentation for details on initiating the workflow request.\n"
+      }
+    },
+    "/hub/v2/pmcs/{pmcId}": {
+      "get": {
+        "responses": {
+          "default": {
+            "description": "pmc",
+            "schema": {
+              "$ref": "#/definitions/NameWebsiteUrlPmcIdPhoneNumberReservationPhoneNumberEmailAddressModel"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "pmcs"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          }
+        ],
+        "summary": "Get a pmc by its id"
+      }
+    },
     "/hub/v2/pmcs/{pmcId}/fees": {
       "post": {
         "consumes": [
@@ -105,69 +193,6 @@
       }
     },
     "/hub/v2/pmcs/{pmcId}/fees/{feeId}": {
-      "get": {
-        "responses": {
-          "default": {
-            "description": "fee",
-            "schema": {
-              "$ref": "#/definitions/NameChargeUnitChargeFrequencyIsTaxableRatesAppliesToFeeIdModel"
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "fees"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The fee id referencing a specific fee",
-            "type": "string",
-            "name": "feeId",
-            "in": "path"
-          }
-        ],
-        "summary": "Get a fee by its id"
-      },
-      "delete": {
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "fees"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The fee id referencing a specific fee",
-            "type": "string",
-            "name": "feeId",
-            "in": "path"
-          }
-        ],
-        "summary": "Delete a fee for a pmc by its fee id"
-      },
       "patch": {
         "consumes": [
           "application/json"
@@ -208,7 +233,7 @@
             }
           }
         ],
-        "summary": "Update a fee by id"
+        "summary": "Update one or more fields of an existing fee"
       },
       "put": {
         "consumes": [
@@ -250,7 +275,154 @@
             }
           }
         ],
-        "summary": "Replace a fee by id"
+        "summary": "Overwrite an existing fee"
+      },
+      "get": {
+        "responses": {
+          "default": {
+            "description": "fee",
+            "schema": {
+              "$ref": "#/definitions/NameChargeUnitChargeFrequencyIsTaxableRatesAppliesToFeeIdModel"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "fees"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The fee id referencing a specific fee",
+            "type": "string",
+            "name": "feeId",
+            "in": "path"
+          }
+        ],
+        "summary": "Get a fee by its id"
+      }
+    },
+    "/hub/v2/pmcs/{pmcId}/fees/{feeId}/applies-to": {
+      "patch": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "fees"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The fee id referencing a specific fee",
+            "type": "string",
+            "name": "feeId",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "in": "body",
+            "name": "Array",
+            "schema": {
+              "$ref": "#/definitions/Array"
+            }
+          }
+        ],
+        "summary": "Assign a fee to 1 or more units, adding to any previous assignments"
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "fees"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The fee id referencing a specific fee",
+            "type": "string",
+            "name": "feeId",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "in": "body",
+            "name": "Array",
+            "schema": {
+              "$ref": "#/definitions/Array"
+            }
+          }
+        ],
+        "summary": "Reassign a fee to 1 or more units, replacing previous assignments"
+      },
+      "delete": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "fees"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The fee id referencing a specific fee",
+            "type": "string",
+            "name": "feeId",
+            "in": "path"
+          }
+        ],
+        "summary": "Unassign all units from the given fee"
       }
     },
     "/hub/v2/pmcs/{pmcId}/promotions": {
@@ -289,6 +461,35 @@
         ],
         "summary": "Create a new promotion for a pmc",
         "description": "\nThis endpoint is used to initiate a workflow request to create a new promotion. If accepted, the response will include a Location header that can be used to poll the status of the workflow request.\n\nSee the \"Get workflow status for a newly created promotion\" endpoint documentation for details on interpreting the workflow status.\n"
+      },
+      "get": {
+        "responses": {
+          "default": {
+            "description": "",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/PromotionIdDescriptionLinkModel"
+              }
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "promotions"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          }
+        ],
+        "summary": "Get all promotions for a given pmc"
       }
     },
     "/hub/v2/pmcs/{pmcId}/promotions/workflows/{workflowId}": {
@@ -328,39 +529,6 @@
       }
     },
     "/hub/v2/pmcs/{pmcId}/promotions/{promotionId}": {
-      "get": {
-        "responses": {
-          "default": {
-            "description": "Promotion",
-            "schema": {
-              "$ref": "#/definitions/IsActiveConditionStayRangeSellRangeDescriptionInstructionsTermsAndConditionsBlackoutRangesStayRangePolicyBlackoutPolicyRuleAppliesToPromotionIdModel"
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "promotions"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The promotion id referencing a specific promotion",
-            "type": "string",
-            "name": "promotionId",
-            "in": "path"
-          }
-        ],
-        "summary": "Get a promotion by its id"
-      },
       "patch": {
         "consumes": [
           "application/json"
@@ -401,7 +569,7 @@
             }
           }
         ],
-        "summary": "Update a promotion by id"
+        "summary": "Update one or more fields of an existing promotion"
       },
       "put": {
         "consumes": [
@@ -443,7 +611,154 @@
             }
           }
         ],
-        "summary": "Replace a promotion by id"
+        "summary": "Overwrite an existing promotion"
+      },
+      "get": {
+        "responses": {
+          "default": {
+            "description": "Promotion",
+            "schema": {
+              "$ref": "#/definitions/IsActiveConditionStayRangeSellRangeDescriptionInstructionsTermsAndConditionsBlackoutRangesStayRangePolicyBlackoutPolicyRuleAppliesToPromotionIdModel"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "promotions"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The promotion id referencing a specific promotion",
+            "type": "string",
+            "name": "promotionId",
+            "in": "path"
+          }
+        ],
+        "summary": "Get a promotion by its id"
+      }
+    },
+    "/hub/v2/pmcs/{pmcId}/promotions/{promotionId}/applies-to": {
+      "patch": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "promotions"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The promotion id referencing a specific promotion",
+            "type": "string",
+            "name": "promotionId",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "in": "body",
+            "name": "Array_2",
+            "schema": {
+              "$ref": "#/definitions/Array_2"
+            }
+          }
+        ],
+        "summary": "Assign a promotion to 1 or more units, adding to any previous assignments"
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "promotions"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The promotion id referencing a specific promotion",
+            "type": "string",
+            "name": "promotionId",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "in": "body",
+            "name": "Array_2",
+            "schema": {
+              "$ref": "#/definitions/Array_2"
+            }
+          }
+        ],
+        "summary": "Reassign a promotion to 1 or more units, replacing previous assignments"
+      },
+      "delete": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "promotions"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The promotion id referencing a specific promotion",
+            "type": "string",
+            "name": "promotionId",
+            "in": "path"
+          }
+        ],
+        "summary": "Unassign all units from the given promotion"
       }
     },
     "/hub/v2/pmcs/{pmcId}/taxes": {
@@ -471,15 +786,17 @@
             "in": "path"
           },
           {
-            "required": false,
+            "required": true,
+            "description": "tax",
             "in": "body",
-            "name": "TaxIdNameCalculatedSeasonsAppliesToModel",
+            "name": "NameCalculatedSeasonsAppliesToModel",
             "schema": {
-              "$ref": "#/definitions/TaxIdNameCalculatedSeasonsAppliesToModel"
+              "$ref": "#/definitions/NameCalculatedSeasonsAppliesToModel"
             }
           }
         ],
-        "summary": "Create a new tax for a pmc"
+        "summary": "Create a new tax for a pmc",
+        "description": "\nThis endpoint is used to initiate a workflow request to create a new tax. If accepted, the response will include a Location header that can be used to poll the status of the workflow request.\n\nSee the \"Get workflow status for a newly created tax\" endpoint documentation for details on interpreting the workflow status.\n"
       },
       "get": {
         "responses": {
@@ -543,17 +860,101 @@
             "in": "path"
           }
         ],
-        "summary": "Gets the status for a newly created tax",
-        "description": "\n      PLACEHOLDER ROUTE:\n      Currently not implemented. Will be released at a later time.\n      "
+        "summary": "Get workflow status for a newly created tax",
+        "description": "\nThis endpoint is used to check the status of a recently create tax workflow request.\n\nSee the \"Create a new tax for a pmc\" endpoint documentation for details on initiating the workflow request.\n"
       }
     },
     "/hub/v2/pmcs/{pmcId}/taxes/{taxId}": {
+      "patch": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "taxes"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The tax id referencing a specific tax",
+            "type": "string",
+            "name": "taxId",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "description": "tax",
+            "in": "body",
+            "name": "NameCalculatedSeasonsAppliesToModel_2",
+            "schema": {
+              "$ref": "#/definitions/NameCalculatedSeasonsAppliesToModel_2"
+            }
+          }
+        ],
+        "summary": "Update one or more fields of an existing tax"
+      },
+      "put": {
+        "consumes": [
+          "application/json"
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "taxes"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The tax id referencing a specific tax",
+            "type": "string",
+            "name": "taxId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "tax",
+            "in": "body",
+            "name": "NameCalculatedSeasonsAppliesToModel",
+            "schema": {
+              "$ref": "#/definitions/NameCalculatedSeasonsAppliesToModel"
+            }
+          }
+        ],
+        "summary": "Overwrite an existing tax"
+      },
       "get": {
         "responses": {
           "default": {
-            "description": "",
+            "description": "tax",
             "schema": {
-              "$ref": "#/definitions/TaxIdNameCalculatedSeasonsAppliesToModel"
+              "$ref": "#/definitions/NameCalculatedSeasonsAppliesToTaxIdModel"
             }
           }
         },
@@ -580,152 +981,9 @@
           }
         ],
         "summary": "Get a tax by its id"
-      },
-      "delete": {
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "taxes"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The tax id referencing a specific tax",
-            "type": "string",
-            "name": "taxId",
-            "in": "path"
-          }
-        ],
-        "summary": "Delete a tax for a pmc by its tax id"
-      },
-      "patch": {
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "taxes"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The tax id referencing a specific tax",
-            "type": "string",
-            "name": "taxId",
-            "in": "path"
-          },
-          {
-            "required": false,
-            "in": "body",
-            "name": "TaxIdNameCalculatedSeasonsAppliesToModel",
-            "schema": {
-              "$ref": "#/definitions/TaxIdNameCalculatedSeasonsAppliesToModel"
-            }
-          }
-        ],
-        "summary": "Update a property on a tax given its id"
-      },
-      "put": {
-        "consumes": [
-          "application/json"
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "taxes"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The tax id referencing a specific tax",
-            "type": "string",
-            "name": "taxId",
-            "in": "path"
-          },
-          {
-            "required": false,
-            "in": "body",
-            "name": "TaxIdNameCalculatedSeasonsAppliesToModel",
-            "schema": {
-              "$ref": "#/definitions/TaxIdNameCalculatedSeasonsAppliesToModel"
-            }
-          }
-        ],
-        "summary": "Overwrite an existing tax"
       }
     },
     "/hub/v2/pmcs/{pmcId}/taxes/{taxId}/applies-to": {
-      "delete": {
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "taxes"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The tax id referencing a specific tax",
-            "type": "string",
-            "name": "taxId",
-            "in": "path"
-          }
-        ],
-        "summary": "Unassign all units from the given tax",
-        "description": "\n      PLACEHOLDER ROUTE:\n      Currently not implemented. Will be released at a later time.\n    "
-      },
       "patch": {
         "consumes": [
           "application/json"
@@ -759,14 +1017,13 @@
           {
             "required": true,
             "in": "body",
-            "name": "Array",
+            "name": "Array_3",
             "schema": {
-              "$ref": "#/definitions/Array"
+              "$ref": "#/definitions/Array_3"
             }
           }
         ],
-        "summary": "Assign a tax to 1 or more rental units",
-        "description": "\n      PLACEHOLDER ROUTE:\n      Currently not implemented. Will be released at a later time.\n    "
+        "summary": "Assign a tax to 1 or more units, adding to any previous assignments"
       },
       "put": {
         "consumes": [
@@ -801,14 +1058,43 @@
           {
             "required": true,
             "in": "body",
-            "name": "Array",
+            "name": "Array_3",
             "schema": {
-              "$ref": "#/definitions/Array"
+              "$ref": "#/definitions/Array_3"
             }
           }
         ],
-        "summary": "Assign a tax to 1 or more rental units",
-        "description": "\n      PLACEHOLDER ROUTE:\n      Currently not implemented. Will be released at a later time.\n    "
+        "summary": "Reassign a tax to 1 or more units, replacing previous assignments"
+      },
+      "delete": {
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "taxes"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The tax id referencing a specific tax",
+            "type": "string",
+            "name": "taxId",
+            "in": "path"
+          }
+        ],
+        "summary": "Unassign all units from the given tax"
       }
     },
     "/hub/v2/pmcs/{pmcId}/units": {
@@ -876,12 +1162,14 @@
           },
           {
             "required": false,
+            "description": "set to include or exlude units based on the value of `isAvailableForBooking`",
             "type": "boolean",
             "name": "isAvailableForBooking",
             "in": "query"
           }
         ],
-        "summary": "Get a list of units by pmcId and optionally isAvailableForBooking"
+        "summary": "Get all units for a given pmc",
+        "description": "\nThe units can be further filtered by `isAvailableForBooking` if desired.\n"
       }
     },
     "/hub/v2/pmcs/{pmcId}/units/workflows/{workflowId}": {
@@ -921,39 +1209,6 @@
       }
     },
     "/hub/v2/pmcs/{pmcId}/units/{unitId}": {
-      "get": {
-        "responses": {
-          "default": {
-            "description": "Unit",
-            "schema": {
-              "$ref": "#/definitions/NameIsAvailableForBookingGeoLocationBedroomCountFullBathroomsThreeQuarterBathroomsHalfBathroomsMaxOccupancyAddressCurrencyCodeBuildingCategoryBuildingTypeAmenitiesUnitNumberDescriptionDisclaimerTaxIdNumberPermitNumberUnitIdModel"
-            }
-          }
-        },
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "units"
-        ],
-        "parameters": [
-          {
-            "required": true,
-            "description": "The PMC id referencing a specific PMC",
-            "type": "string",
-            "name": "pmcId",
-            "in": "path"
-          },
-          {
-            "required": true,
-            "description": "The unit id referencing a specific unit",
-            "type": "string",
-            "name": "unitId",
-            "in": "path"
-          }
-        ],
-        "summary": "Get a unit by its id"
-      },
       "patch": {
         "consumes": [
           "application/json"
@@ -994,7 +1249,7 @@
             }
           }
         ],
-        "summary": "Update a unit by id"
+        "summary": "Update one or more fields of an existing unit"
       },
       "put": {
         "consumes": [
@@ -1036,11 +1291,159 @@
             }
           }
         ],
-        "summary": "Replace a unit by id"
+        "summary": "Overwrite an existing unit"
+      },
+      "get": {
+        "responses": {
+          "default": {
+            "description": "Unit",
+            "schema": {
+              "$ref": "#/definitions/NameIsAvailableForBookingGeoLocationBedroomCountFullBathroomsThreeQuarterBathroomsHalfBathroomsMaxOccupancyAddressCurrencyCodeBuildingCategoryBuildingTypeAmenitiesUnitNumberDescriptionDisclaimerTaxIdNumberPermitNumberUnitIdModel"
+            }
+          }
+        },
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "units"
+        ],
+        "parameters": [
+          {
+            "required": true,
+            "description": "The PMC id referencing a specific PMC",
+            "type": "string",
+            "name": "pmcId",
+            "in": "path"
+          },
+          {
+            "required": true,
+            "description": "The unit id referencing a specific unit",
+            "type": "string",
+            "name": "unitId",
+            "in": "path"
+          }
+        ],
+        "summary": "Get a unit by its id"
       }
     }
   },
   "definitions": {
+    "CountryCodeMainNumberExtModel": {
+      "required": [
+        "mainNumber"
+      ],
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "Only numbers are allowed"
+        },
+        "mainNumber": {
+          "type": "string",
+          "description": "Only numbers are allowed"
+        },
+        "ext": {
+          "type": "string"
+        }
+      }
+    },
+    "NamePhoneNumberReservationPhoneNumberEmailAddressWebsiteUrlModel": {
+      "required": [
+        "name",
+        "phoneNumber",
+        "reservationPhoneNumber",
+        "emailAddress"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "$ref": "#/definitions/CountryCodeMainNumberExtModel"
+        },
+        "reservationPhoneNumber": {
+          "$ref": "#/definitions/CountryCodeMainNumberExtModel"
+        },
+        "emailAddress": {
+          "type": "string"
+        },
+        "websiteUrl": {
+          "type": "string"
+        }
+      }
+    },
+    "StatusMessagePmcIdUrlModel": {
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "SUCCESS",
+            "FAILED"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "description": "Informational text in relation to status"
+        },
+        "pmcId": {
+          "type": "string",
+          "description": "The newly created pmc id (when status is SUCCESS)"
+        },
+        "url": {
+          "type": "string",
+          "description": "The relative url for getting the newly created pmc (when status is SUCCESS)"
+        }
+      }
+    },
+    "CountryCodeExtMainNumberModel": {
+      "required": [
+        "mainNumber"
+      ],
+      "properties": {
+        "countryCode": {
+          "type": "string",
+          "description": "Only numbers are allowed"
+        },
+        "ext": {
+          "type": "string"
+        },
+        "mainNumber": {
+          "type": "string",
+          "description": "Only numbers are allowed"
+        }
+      }
+    },
+    "NameWebsiteUrlPmcIdPhoneNumberReservationPhoneNumberEmailAddressModel": {
+      "required": [
+        "name",
+        "pmcId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "websiteUrl": {
+          "type": "string"
+        },
+        "pmcId": {
+          "type": "string",
+          "description": "The PMC id referencing a specific PMC"
+        },
+        "phoneNumber": {
+          "$ref": "#/definitions/CountryCodeExtMainNumberModel"
+        },
+        "reservationPhoneNumber": {
+          "$ref": "#/definitions/CountryCodeExtMainNumberModel"
+        },
+        "emailAddress": {
+          "type": "string"
+        }
+      }
+    },
     "BeginEndModel": {
       "required": [
         "begin"
@@ -1138,9 +1541,13 @@
       }
     },
     "FeeIdNameLinkModel": {
+      "required": [
+        "feeId"
+      ],
       "properties": {
         "feeId": {
-          "type": "string"
+          "type": "string",
+          "description": "The fee id referencing a specific fee"
         },
         "name": {
           "type": "string"
@@ -1175,53 +1582,6 @@
         "url": {
           "type": "string",
           "description": "The relative url for getting the newly created fee (when status is SUCCESS)"
-        }
-      }
-    },
-    "NameChargeUnitChargeFrequencyIsTaxableRatesAppliesToFeeIdModel": {
-      "required": [
-        "name",
-        "chargeUnit",
-        "chargeFrequency",
-        "isTaxable",
-        "rates"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "chargeUnit": {
-          "type": "string",
-          "enum": [
-            "PERSON",
-            "ROOM"
-          ]
-        },
-        "chargeFrequency": {
-          "type": "string",
-          "enum": [
-            "NIGHT",
-            "STAY"
-          ]
-        },
-        "isTaxable": {
-          "type": "boolean"
-        },
-        "rates": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/NameCalculationAmountApplicabilityModel"
-          },
-          "minimum": 1
-        },
-        "appliesTo": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UnitIdModel"
-          }
-        },
-        "feeId": {
-          "type": "string"
         }
       }
     },
@@ -1260,6 +1620,61 @@
             "$ref": "#/definitions/UnitIdModel"
           }
         }
+      }
+    },
+    "NameChargeUnitChargeFrequencyIsTaxableRatesAppliesToFeeIdModel": {
+      "required": [
+        "name",
+        "chargeUnit",
+        "chargeFrequency",
+        "isTaxable",
+        "rates",
+        "feeId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "chargeUnit": {
+          "type": "string",
+          "enum": [
+            "PERSON",
+            "ROOM"
+          ]
+        },
+        "chargeFrequency": {
+          "type": "string",
+          "enum": [
+            "NIGHT",
+            "STAY"
+          ]
+        },
+        "isTaxable": {
+          "type": "boolean"
+        },
+        "rates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/NameCalculationAmountApplicabilityModel"
+          },
+          "minimum": 1
+        },
+        "appliesTo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UnitIdModel"
+          }
+        },
+        "feeId": {
+          "type": "string",
+          "description": "The fee id referencing a specific fee"
+        }
+      }
+    },
+    "Array": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/UnitIdModel"
       }
     },
     "MinimumStayMaximumStayModel": {
@@ -1442,6 +1857,24 @@
         }
       }
     },
+    "PromotionIdDescriptionLinkModel": {
+      "required": [
+        "promotionId"
+      ],
+      "properties": {
+        "promotionId": {
+          "type": "string",
+          "description": "The promotion id referencing a specific promotion"
+        },
+        "description": {
+          "type": "string"
+        },
+        "link": {
+          "type": "string",
+          "description": "A link to the details for the promotion"
+        }
+      }
+    },
     "StatusMessagePromotionIdUrlModel": {
       "required": [
         "status"
@@ -1466,79 +1899,6 @@
         "url": {
           "type": "string",
           "description": "The relative url for getting the newly created promotion (when status is SUCCESS)"
-        }
-      }
-    },
-    "IsActiveConditionStayRangeSellRangeDescriptionInstructionsTermsAndConditionsBlackoutRangesStayRangePolicyBlackoutPolicyRuleAppliesToPromotionIdModel": {
-      "required": [
-        "isActive",
-        "stayRange",
-        "sellRange",
-        "description",
-        "instructions",
-        "termsAndConditions",
-        "stayRangePolicy",
-        "blackoutPolicy",
-        "rule"
-      ],
-      "properties": {
-        "isActive": {
-          "type": "boolean",
-          "description": "Allows setup of promotions without allowing them to be booked"
-        },
-        "condition": {
-          "$ref": "#/definitions/MinimumStayMaximumStayModel"
-        },
-        "stayRange": {
-          "$ref": "#/definitions/BeginEndModel_2"
-        },
-        "sellRange": {
-          "$ref": "#/definitions/BeginEndModel_3"
-        },
-        "description": {
-          "type": "string"
-        },
-        "instructions": {
-          "type": "string"
-        },
-        "termsAndConditions": {
-          "type": "string"
-        },
-        "blackoutRanges": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/BeginEndModel_4"
-          }
-        },
-        "stayRangePolicy": {
-          "type": "string",
-          "description": "Specifies how the stayRange is applied:\n    COMPLETE - entire stay must be within stayRange\n    PARTIAL - any part of the stay must be within stayRange\n    CHECK_IN - check-in date must be in stayRange\n  ",
-          "enum": [
-            "COMPLETE",
-            "PARTIAL",
-            "CHECK_IN"
-          ]
-        },
-        "blackoutPolicy": {
-          "type": "string",
-          "description": "Specifies how blackoutRanges are applied:\n    COMPLETE - entire stay must not fall in a blackoutRange\n    PARTIAL - any part of the stay must not fall in a blackoutRange\n    CHECK_IN - check-in date must not fall in a blackoutRange\n  ",
-          "enum": [
-            "COMPLETE",
-            "PARTIAL",
-            "CHECK_IN"
-          ]
-        },
-        "rule": {
-          "$ref": "#/definitions/StayRangePolicyBlackoutPolicyCalculatedAmountStayNightsFreeNightsDoFreeNightsRepeatFreeNightDiscountTypeModel"
-        },
-        "appliesTo": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UnitIdRatePlanIdModel"
-          }
-        },
-        "promotionId": {
-          "type": "string"
         }
       }
     },
@@ -1630,6 +1990,87 @@
         }
       }
     },
+    "IsActiveConditionStayRangeSellRangeDescriptionInstructionsTermsAndConditionsBlackoutRangesStayRangePolicyBlackoutPolicyRuleAppliesToPromotionIdModel": {
+      "required": [
+        "isActive",
+        "stayRange",
+        "sellRange",
+        "description",
+        "instructions",
+        "termsAndConditions",
+        "stayRangePolicy",
+        "blackoutPolicy",
+        "rule",
+        "promotionId"
+      ],
+      "properties": {
+        "isActive": {
+          "type": "boolean",
+          "description": "Allows setup of promotions without allowing them to be booked"
+        },
+        "condition": {
+          "$ref": "#/definitions/MinimumStayMaximumStayModel"
+        },
+        "stayRange": {
+          "$ref": "#/definitions/BeginEndModel_2"
+        },
+        "sellRange": {
+          "$ref": "#/definitions/BeginEndModel_3"
+        },
+        "description": {
+          "type": "string"
+        },
+        "instructions": {
+          "type": "string"
+        },
+        "termsAndConditions": {
+          "type": "string"
+        },
+        "blackoutRanges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BeginEndModel_4"
+          }
+        },
+        "stayRangePolicy": {
+          "type": "string",
+          "description": "Specifies how the stayRange is applied:\n    COMPLETE - entire stay must be within stayRange\n    PARTIAL - any part of the stay must be within stayRange\n    CHECK_IN - check-in date must be in stayRange\n  ",
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "CHECK_IN"
+          ]
+        },
+        "blackoutPolicy": {
+          "type": "string",
+          "description": "Specifies how blackoutRanges are applied:\n    COMPLETE - entire stay must not fall in a blackoutRange\n    PARTIAL - any part of the stay must not fall in a blackoutRange\n    CHECK_IN - check-in date must not fall in a blackoutRange\n  ",
+          "enum": [
+            "COMPLETE",
+            "PARTIAL",
+            "CHECK_IN"
+          ]
+        },
+        "rule": {
+          "$ref": "#/definitions/StayRangePolicyBlackoutPolicyCalculatedAmountStayNightsFreeNightsDoFreeNightsRepeatFreeNightDiscountTypeModel"
+        },
+        "appliesTo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UnitIdRatePlanIdModel"
+          }
+        },
+        "promotionId": {
+          "type": "string",
+          "description": "The promotion id referencing a specific promotion"
+        }
+      }
+    },
+    "Array_2": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/UnitIdRatePlanIdModel"
+      }
+    },
     "BeginEndAmountModel": {
       "required": [
         "begin",
@@ -1661,15 +2102,14 @@
         }
       }
     },
-    "TaxIdNameCalculatedSeasonsAppliesToModel": {
+    "NameCalculatedSeasonsAppliesToModel": {
       "required": [
         "name",
-        "calculated"
+        "calculated",
+        "seasons",
+        "appliesTo"
       ],
       "properties": {
-        "taxId": {
-          "type": "string"
-        },
         "name": {
           "type": "string"
         },
@@ -1696,9 +2136,13 @@
       }
     },
     "TaxIdNameLinkModel": {
+      "required": [
+        "taxId"
+      ],
       "properties": {
         "taxId": {
-          "type": "string"
+          "type": "string",
+          "description": "The tax id referencing a specific tax"
         },
         "name": {
           "type": "string"
@@ -1736,7 +2180,75 @@
         }
       }
     },
-    "Array": {
+    "NameCalculatedSeasonsAppliesToModel_2": {
+      "required": [
+        "appliesTo"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "calculated": {
+          "type": "string",
+          "enum": [
+            "AMOUNT",
+            "PERCENTAGE_OF_SUBTOTAL"
+          ]
+        },
+        "seasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BeginEndAmountModel"
+          },
+          "minimum": 1
+        },
+        "appliesTo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UnitIdModel_2"
+          }
+        }
+      }
+    },
+    "NameCalculatedSeasonsAppliesToTaxIdModel": {
+      "required": [
+        "name",
+        "calculated",
+        "seasons",
+        "appliesTo",
+        "taxId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "calculated": {
+          "type": "string",
+          "enum": [
+            "AMOUNT",
+            "PERCENTAGE_OF_SUBTOTAL"
+          ]
+        },
+        "seasons": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/BeginEndAmountModel"
+          },
+          "minimum": 1
+        },
+        "appliesTo": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UnitIdModel_2"
+          }
+        },
+        "taxId": {
+          "type": "string",
+          "description": "The tax id referencing a specific tax"
+        }
+      }
+    },
+    "Array_3": {
       "type": "array",
       "items": {
         "$ref": "#/definitions/UnitIdModel_2"
@@ -1889,9 +2401,13 @@
       }
     },
     "UnitIdNameLinkModel": {
+      "required": [
+        "unitId"
+      ],
       "properties": {
         "unitId": {
-          "type": "string"
+          "type": "string",
+          "description": "The unit id referencing a specific unit"
         },
         "name": {
           "type": "string"
@@ -1926,107 +2442,6 @@
         "url": {
           "type": "string",
           "description": "The relative url for getting the newly created unit (when status is SUCCESS)"
-        }
-      }
-    },
-    "NameIsAvailableForBookingGeoLocationBedroomCountFullBathroomsThreeQuarterBathroomsHalfBathroomsMaxOccupancyAddressCurrencyCodeBuildingCategoryBuildingTypeAmenitiesUnitNumberDescriptionDisclaimerTaxIdNumberPermitNumberUnitIdModel": {
-      "required": [
-        "name",
-        "bedroomCount",
-        "maxOccupancy",
-        "buildingCategory",
-        "buildingType"
-      ],
-      "properties": {
-        "name": {
-          "type": "string"
-        },
-        "isAvailableForBooking": {
-          "type": "boolean",
-          "description": "true if unit should be available for distribution - use to add content before activating units"
-        },
-        "geoLocation": {
-          "$ref": "#/definitions/LatitudeLongitudeModel"
-        },
-        "bedroomCount": {
-          "type": "integer",
-          "description": "integer greater than 0 representing total # of bedrooms",
-          "minimum": 1
-        },
-        "fullBathrooms": {
-          "type": "integer",
-          "description": "integer representing # of full baths (contain tub, sink, & toilet)"
-        },
-        "threeQuarterBathrooms": {
-          "type": "integer",
-          "description": "integer representing # of 3/4 baths (shower, sink & toilet)"
-        },
-        "halfBathrooms": {
-          "type": "integer",
-          "description": "integer representing # of 1/2 baths (sink & toilet)"
-        },
-        "maxOccupancy": {
-          "type": "integer"
-        },
-        "address": {
-          "$ref": "#/definitions/Address1Address2CityStateCodePostalCodeCountryCodeModel"
-        },
-        "currencyCode": {
-          "type": "string",
-          "description": "unit's default unit of currency. Defaults to USD"
-        },
-        "buildingCategory": {
-          "type": "string",
-          "enum": [
-            "HOTEL",
-            "BED_AND_BREAKFAST",
-            "CONDO",
-            "APARTMENT",
-            "HOME"
-          ]
-        },
-        "buildingType": {
-          "type": "string",
-          "enum": [
-            "HOTEL",
-            "ALL_INCLUSIVE",
-            "INN",
-            "LODGE",
-            "BED_AND_BREAKFAST",
-            "COTTAGE",
-            "CONDO",
-            "TOWNHOME",
-            "APARTMENT",
-            "VACATION_HOME",
-            "CABIN_LODGE_COTTAGE",
-            "CHALET",
-            "VILLA"
-          ]
-        },
-        "amenities": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "array of strings"
-        },
-        "unitNumber": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        },
-        "disclaimer": {
-          "type": "string"
-        },
-        "taxIdNumber": {
-          "type": "string"
-        },
-        "permitNumber": {
-          "type": "string"
-        },
-        "unitId": {
-          "type": "string"
         }
       }
     },
@@ -2120,12 +2535,115 @@
           "type": "string"
         }
       }
+    },
+    "NameIsAvailableForBookingGeoLocationBedroomCountFullBathroomsThreeQuarterBathroomsHalfBathroomsMaxOccupancyAddressCurrencyCodeBuildingCategoryBuildingTypeAmenitiesUnitNumberDescriptionDisclaimerTaxIdNumberPermitNumberUnitIdModel": {
+      "required": [
+        "name",
+        "bedroomCount",
+        "maxOccupancy",
+        "buildingCategory",
+        "buildingType",
+        "unitId"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "isAvailableForBooking": {
+          "type": "boolean",
+          "description": "true if unit should be available for distribution - use to add content before activating units"
+        },
+        "geoLocation": {
+          "$ref": "#/definitions/LatitudeLongitudeModel"
+        },
+        "bedroomCount": {
+          "type": "integer",
+          "description": "integer greater than 0 representing total # of bedrooms",
+          "minimum": 1
+        },
+        "fullBathrooms": {
+          "type": "integer",
+          "description": "integer representing # of full baths (contain tub, sink, & toilet)"
+        },
+        "threeQuarterBathrooms": {
+          "type": "integer",
+          "description": "integer representing # of 3/4 baths (shower, sink & toilet)"
+        },
+        "halfBathrooms": {
+          "type": "integer",
+          "description": "integer representing # of 1/2 baths (sink & toilet)"
+        },
+        "maxOccupancy": {
+          "type": "integer"
+        },
+        "address": {
+          "$ref": "#/definitions/Address1Address2CityStateCodePostalCodeCountryCodeModel"
+        },
+        "currencyCode": {
+          "type": "string",
+          "description": "unit's default unit of currency. Defaults to USD"
+        },
+        "buildingCategory": {
+          "type": "string",
+          "enum": [
+            "HOTEL",
+            "BED_AND_BREAKFAST",
+            "CONDO",
+            "APARTMENT",
+            "HOME"
+          ]
+        },
+        "buildingType": {
+          "type": "string",
+          "enum": [
+            "HOTEL",
+            "ALL_INCLUSIVE",
+            "INN",
+            "LODGE",
+            "BED_AND_BREAKFAST",
+            "COTTAGE",
+            "CONDO",
+            "TOWNHOME",
+            "APARTMENT",
+            "VACATION_HOME",
+            "CABIN_LODGE_COTTAGE",
+            "CHALET",
+            "VILLA"
+          ]
+        },
+        "amenities": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "array of strings"
+        },
+        "unitNumber": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "disclaimer": {
+          "type": "string"
+        },
+        "taxIdNumber": {
+          "type": "string"
+        },
+        "permitNumber": {
+          "type": "string"
+        },
+        "unitId": {
+          "type": "string",
+          "description": "The unit id referencing a specific unit"
+        }
+      }
     }
   },
   "tags": [],
   "info": {
     "title": "Public API",
     "description": "The public facing interface for LeisureLink, Inc",
-    "version": "2.4.1"
+    "version": "2.6.1"
   }
 }
