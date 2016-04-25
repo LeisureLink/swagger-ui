@@ -1,6 +1,6 @@
 /**
  * @leisurelink/swagger-ui - Swagger UI is a dependency-free collection of HTML, JavaScript, and CSS assets that dynamically generate beautiful documentation from a Swagger-compliant API
- * @version v1.0.7+2.1.4
+ * @version v1.0.8+2.1.4
  * @link http://swagger.io
  * @license Apache-2.0
  */
@@ -25159,6 +25159,9 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       }
     }
 
+    // override info object (if provided)
+    _.extend(this.model.info, opts.swaggerOptions.infoOverride);
+
     // set up the UI for input
     this.model.auths = [];
 
@@ -26233,6 +26236,10 @@ SwaggerUi.Views.ResourceView = Backbone.View.extend({
   render: function(){
     var methods = {};
 
+    if (this.options.swaggerOptions.suppressTagNameInTagGroupHeader) {
+      this.model.name = this.model.summary;
+      this.model.summary = null;
+    }
 
     $(this.el).html(Handlebars.templates.resource(this.model));
 

@@ -16,6 +16,10 @@ SwaggerUi.Views.ResourceView = Backbone.View.extend({
   render: function(){
     var methods = {};
 
+    if (this.options.swaggerOptions.suppressTagNameInTagGroupHeader) {
+      this.model.name = this.model.summary;
+      this.model.summary = null;
+    }
 
     $(this.el).html(Handlebars.templates.resource(this.model));
 

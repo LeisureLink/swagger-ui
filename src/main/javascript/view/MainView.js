@@ -41,6 +41,9 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       }
     }
 
+    // override info object (if provided)
+    _.extend(this.model.info, opts.swaggerOptions.infoOverride);
+
     // set up the UI for input
     this.model.auths = [];
 
