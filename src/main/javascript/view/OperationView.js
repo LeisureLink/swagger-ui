@@ -177,6 +177,9 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
             signature: value.getMockSignature()
           };
         }
+        else if(value.description) {
+          this.model.successDescription = value.description;
+        }
       }
     } else if (this.model.responseClassSignature && this.model.responseClassSignature !== 'string') {
       signatureModel = {
