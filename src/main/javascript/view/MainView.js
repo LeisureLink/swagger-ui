@@ -19,6 +19,20 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       sorterOption = opts.swaggerOptions.apisSorter;
       if (_.isFunction(sorterOption)) {
         sorterFn = sorterOption;
+      } else if (_.isArray(sorterOption)) {
+        sorterFn = function(a, b) {
+          var indexA = _.indexOf(sorterOption, a.tag);
+          var indexB = _.indexOf(sorterOption, b.tag);
+          if (indexA < 0) {
+            return +1;
+          }
+          else if (indexB < 0) {
+            return -1;
+          }
+          else {
+            return indexA - indexB;
+          }
+        };
       } else {
         sorterFn = this.apisSorter[sorterOption];
       }
